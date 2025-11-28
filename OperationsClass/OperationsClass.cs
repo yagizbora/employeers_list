@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using dotenv.net;
 using Microsoft.Data.SqlClient;
+using Dapper;
 namespace İş_yeri_Kullanıcı_Girişleri.OperationsClass
 {
     public class OperationsClass 
@@ -31,7 +32,7 @@ namespace İş_yeri_Kullanıcı_Girişleri.OperationsClass
          }
 
 
-        public string? CreateEmployeer(string? Name, string? Departmant)
+        public async Task<string?> CreateEmployeer(string? Name, string? Departmant)
         {
             try
             {
@@ -44,10 +45,7 @@ namespace İş_yeri_Kullanıcı_Girişleri.OperationsClass
                 {
                     connection.Open();
                     string sql = "INSERT INTO dbo.Employeer_List (Name,Department,is_deleted) VALUES (@Name,@Departmant,0)";
-                    var result = new SqlCommand(sql, connection);
-                    result.Parameters.AddWithValue("@Name", Name);
-                    result.Parameters.AddWithValue("@Departmant", Departmant);
-                    int response = result.ExecuteNonQuery();
+                    var response = await connection.ExecuteAsync(sql, new { Name = Name, Departmant = Departmant });
                     if(response > 0)
                     {
                         return "Kayıt başarı ile eklendi";

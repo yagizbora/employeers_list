@@ -31,7 +31,7 @@ namespace İş_yeri_Kullanıcı_Girişleri
             getdata();
         }
 
-        private void AddEmployeerButton_Click(object sender, EventArgs e)
+        private async void AddEmployeerButton_Click(object sender, EventArgs e)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace İş_yeri_Kullanıcı_Girişleri
                 string departmant = EmployeerDepartmant.Text.Trim();
 
 
-                var operasyon = operations.CreateEmployeer(name, departmant);
+                var operasyon = await operations.CreateEmployeer(name, departmant);
                 if (operasyon != null)
                 {
                     MessageBox.Show(operasyon);
