@@ -12,12 +12,12 @@ namespace İş_yeri_Kullanıcı_Girişleri
         OperationsClass.OperationsClass operations = new OperationsClass.OperationsClass();
 
 
-        public void getdata()
+        public async void getdata()
         {
             try
             {
                 DataGrid.DataSource = null;
-                var data = operations.GetEmployeer();
+                var data = await operations.GetEmployeer();
                 DataGrid.DataSource = data;
             }
             catch (Exception ex)
@@ -54,14 +54,13 @@ namespace İş_yeri_Kullanıcı_Girişleri
             }
         }
 
-        private void DeleteEmployeerRecord_Click(object sender, EventArgs e)
+        private async void DeleteEmployeerRecord_Click(object sender, EventArgs e)
         {
             try
             {
                 if (DataGrid.SelectedRows.Count > 0)
                 {
                     int employeerId = Convert.ToInt32(DataGrid.SelectedRows[0].Cells["Sicil_Numarasi"].Value);
-                    Console.WriteLine(Convert.ToInt32(DataGrid.SelectedRows[0].Cells["Sicil_Numarasi"].Value));
                     var operasyon = operations.DeleteEmployeer(employeerId);
                     if (operasyon)
                     {

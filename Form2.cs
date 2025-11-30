@@ -36,7 +36,7 @@ namespace İş_yeri_Kullanıcı_Girişleri
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace İş_yeri_Kullanıcı_Girişleri
                 { 
                     result = int.Parse(textBox1.Text);
                     dataGridView1.DataSource = null;
-                    var data = operations.GetEmployeer(result);
+                    var data = await operations.GetEmployeer(result);
                     Console.WriteLine(data);
                     dataGridView1.DataSource = data;
                 }

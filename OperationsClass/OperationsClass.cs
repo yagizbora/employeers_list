@@ -62,7 +62,7 @@ namespace İş_yeri_Kullanıcı_Girişleri.OperationsClass
             }
 
         }
-        public DataTable? GetEmployeer()
+        public async Task<DataTable?> GetEmployeer()
         {
             try
             {
@@ -86,22 +86,25 @@ namespace İş_yeri_Kullanıcı_Girişleri.OperationsClass
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Hata: " + ex.Message);    
                 return null;
-            }
+            }    
 
         }
-        public DataTable? GetEmployeer(int id) 
+        public async Task<DataTable?> GetEmployeer(int id) 
         {
             try
             {
                 using (var connection = new SqlConnection(Connectionstring))
                 {
                     string sql = "SELECT ID as Sicil_Numarasi,Name as İsim,Department as Departman FROM dbo.Employeer_List WHERE is_deleted = 0 AND ID = @id";
-                    var command = new SqlCommand(sql, connection);
-                    command.Parameters.AddWithValue("@id", id);
-                    var adapter = new SqlDataAdapter(command);
+                    var response = await connection.QueryFirstOrDefaultAsync(sql, new { id = id });
                     DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
+                    if(response == null)
+                    {
+                        return null;
+                    }
+                    response.Fill(dataTable);
                     return dataTable;
                 }
             }
@@ -122,10 +125,7 @@ namespace İş_yeri_Kullanıcı_Girişleri.OperationsClass
                 {
                     connection.Open();
                     string sql = "UPDATE dbo.Employeer_List SET is_deleted = 1 WHERE ID = @id";
-                    using var command = new SqlCommand(sql, connection);
-                    command.Parameters.AddWithValue("@id", id);
-
-                    int response = command.ExecuteNonQuery();
+                    var response = connection.Execute(sql, new { id = id });
                     return response > 0;
                 }
             }
